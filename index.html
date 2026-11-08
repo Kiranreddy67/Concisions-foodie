@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concisions Foodie</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>">
+<style>
+:root{--bg:#f1f6ec;--card:#fff;--ink:#1d2a17;--mute:#5d6b55;--pri:#3e7b27;--pri2:#dcefd2;--sec:#e4572e;--line:#dfe8d8;--input:#edf3e8}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#12180f;--card:#1c2418;--ink:#e8f1e2;--mute:#9bab92;--pri:#8fd16b;--pri2:#2c3d23;--line:#2a3624;--input:#252f20}}
+:root[data-theme=dark]{--bg:#12180f;--card:#1c2418;--ink:#e8f1e2;--mute:#9bab92;--pri:#8fd16b;--pri2:#2c3d23;--line:#2a3624;--input:#252f20}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+h1,h2,h3{margin:0;letter-spacing:-.4px}h1{font-size:1.9rem;font-weight:800}h2{font-size:1.15rem;margin:22px 0 8px}
+button,input,select{font:inherit;color:inherit}
+.card{background:var(--card);border-radius:20px;padding:18px}
+.btn{background:var(--pri);color:var(--bg);border:0;border-radius:14px;min-height:48px;padding:0 20px;font-weight:700;cursor:pointer;transition:transform .15s}
+.btn:active{transform:scale(.97)}.btn.out{background:none;color:var(--pri);border:2px solid var(--pri)}.btn.full{width:100%}
+label{display:block;font-size:.85rem;color:var(--mute);margin:12px 0 4px}
+input,select{width:100%;background:var(--input);border:2px solid transparent;border-radius:14px;padding:13px;outline:0}
+input:focus,select:focus,button:focus-visible{border-color:var(--pri);outline:0}
+.err{color:var(--sec);font-size:.8rem;min-height:1em;display:block;margin-top:3px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.fade{animation:fade .35s ease both}@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* splash + center */
+.center{min-height:100vh;display:grid;place-items:center;padding:20px}
+.splash{background:var(--pri);color:var(--bg);text-align:center}
+.splash .big{font-size:5.5rem;animation:pop 1s cubic-bezier(.3,1.6,.5,1) both}@keyframes pop{from{transform:scale(.2);opacity:0}}
+/* shell */
+.shell{display:flex;min-height:100vh}
+nav.side{display:none;flex-direction:column;gap:6px;padding:18px 12px;width:84px;background:var(--card);position:sticky;top:0;height:100vh}
+nav a,.bar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px;border-radius:14px;color:var(--mute);text-decoration:none;font-size:.78rem}
+nav a span,.bar a span{font-size:1.4rem}nav a.on,.bar a.on{background:var(--pri2);color:var(--ink);font-weight:700}
+.bar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:var(--card);padding:6px;border-top:1px solid var(--line);z-index:5}
+main{flex:1;padding:18px 16px 110px;max-width:1100px;margin:0 auto;width:100%}
+.fab{position:fixed;right:18px;bottom:84px;z-index:6;box-shadow:0 6px 18px #0003;border-radius:18px;text-decoration:none;display:flex;align-items:center}
+@media(min-width:800px){nav.side{display:flex}.bar{display:none}.fab{bottom:24px}main{padding-bottom:90px}.two{display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start}}
+@media(min-width:1100px){nav.side{width:130px}}
+/* ring + bars */
+.ring{position:relative;width:210px;margin:auto}.ring svg{transform:rotate(-90deg);display:block}
+.ring circle{fill:none;stroke-width:16;stroke-linecap:round}.ring .t{stroke:var(--input)}
+.ring .v{stroke:var(--pri);stroke-dasharray:502.65;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}.ring .v.over{stroke:var(--sec)}
+.ring .n{position:absolute;inset:0;display:grid;place-content:center;text-align:center}.ring b{font-size:2.3rem;line-height:1}
+.mb{margin:10px 0}.mb div:first-child{display:flex;justify-content:space-between;font-size:.88rem}
+.mb .tr{height:10px;border-radius:8px;background:var(--input);margin-top:4px;overflow:hidden}.mb i{display:block;height:100%;width:0;border-radius:8px;transition:width .8s ease}
+/* list + grid */
+.item{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:12px 14px;margin-bottom:8px;transition:transform .25s,opacity .25s}
+.item.gone{transform:translateX(60px);opacity:0}.item .e{font-size:1.8rem}.item .m{flex:1}.item small{color:var(--mute)}
+.x{background:none;border:0;color:var(--sec);font-size:1.2rem;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.fc{background:var(--card);border:0;border-radius:20px;padding:14px;text-align:left;cursor:pointer;min-height:140px;display:flex;flex-direction:column;transition:transform .2s}
+.fc:hover{transform:translateY(-3px)}.fc .e{font-size:2.5rem}.fc b{margin-top:auto}.fc small{color:var(--pri);font-weight:700}
+.tag{align-self:flex-end;font-size:.7rem;background:var(--pri2);border-radius:10px;padding:2px 8px;margin-bottom:-18px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0}.chip{border:1px solid var(--line);background:none;border-radius:10px;padding:8px 14px;cursor:pointer;white-space:nowrap}.chip.on{background:var(--pri2);font-weight:700}
+.narrow{max-width:520px;margin:auto}.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.macros .card{text-align:center;padding:12px}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:14px;z-index:20;animation:fade .3s both}
+.seg{display:flex;background:var(--input);border-radius:14px;padding:4px}.seg button{flex:1;border:0;background:none;padding:10px;border-radius:11px;cursor:pointer}.seg .on{background:var(--card);font-weight:700}
+.sw{display:flex;justify-content:space-between;align-items:center}
+.empty{text-align:center;color:var(--mute);padding:30px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ───────── State (saved in localStorage so data survives refresh) ─────────
+const MEALS=['Breakfast','Lunch','Dinner','Snack'],CATS=['Fruit','Grain','Protein','Dairy','Snack','Meal'];
+const base=[['Banana','🍌','Fruit',105,1,27,0],['Apple','🍎','Fruit',95,0,25,0],['Oatmeal bowl','🥣','Grain',150,5,27,3],['Brown rice cup','🍚','Grain',215,5,45,2],['Boiled egg','🥚','Protein',78,6,1,5],['Grilled chicken','🍗','Protein',165,31,0,4],['Paneer 100g','🧀','Dairy',265,18,4,20],['Greek yogurt','🥛','Dairy',100,17,6,1],['Idli (2 pcs)','🍘','Meal',140,4,30,1],['Veg biryani','🍛','Meal',350,8,58,10],['Masala dosa','🌯','Meal',330,6,50,12],['Peanuts 30g','🥜','Snack',170,7,5,14],['Dark chocolate','🍫','Snack',170,2,13,12],['Pizza slice','🍕','Meal',285,12,36,10]]
+ .map(([name,emoji,cat,kcal,p,c,f])=>({name,emoji,cat,kcal,p,c,f}));
+let S={user:null,goal:2000,dark:null,foods:base,log:[],today:new Date().toDateString()};
+try{const d=JSON.parse(localStorage.getItem('foodie'));if(d)S=d;if(S.today!==new Date().toDateString()){S.log=[];S.today=new Date().toDateString()}}catch(e){}
+const save=()=>{try{localStorage.setItem('foodie',JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sum=k=>S.log.reduce((a,e)=>a+Math.round(S.foods[e.i][k]*e.s),0);
+const go=h=>location.hash=h;
+let cat=null,q='',splashDone=false;
+const isDark=()=>S.dark===null?matchMedia('(prefers-color-scheme: dark)').matches:S.dark;
+function theme(){if(S.dark===null)document.documentElement.removeAttribute('data-theme');else document.documentElement.dataset.theme=S.dark?'dark':'light'}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2200)}
+const fe=(id,m)=>{$('#'+id).textContent=m||'';return !m};
+
+// ───────── Views ─────────
+function shell(tab,html){
+  const items=[['today','📅','Today'],['foods','🍽️','Foods'],['profile','👤','Profile']].map(([k,i,l])=>`<a href="#/${k}" class="${tab===k?'on':''}"><span>${i}</span>${l}</a>`).join('');
+  return `<div class="shell"><nav class="side"><div style="font-size:2rem;text-align:center;margin-bottom:10px">🥗</div>${items}</nav><main class="fade">${html}</main><div class="bar">${items}</div></div><a class="btn fab" href="#/add">＋ New food</a>`;
+}
+function splash(){return `<div class="center splash"><div><div class="big">🥗</div><h1>Concisions Foodie</h1><p>Know what you eat.</p></div></div>`}
+function login(){return `<div class="center"><form class="card narrow fade" id="lf" novalidate style="width:100%;max-width:420px">
+<div style="text-align:center;font-size:3rem">🥗</div><h2 style="text-align:center">Welcome to Concisions Foodie</h2>
+<label for="n">Your name</label><input id="n" autocomplete="name"><span class="err" id="en"></span>
+<label for="e">Email</label><input id="e" type="email" autocomplete="email"><span class="err" id="ee"></span>
+<label for="p">Password</label><input id="p" type="password" autocomplete="new-password"><span class="err" id="ep"></span>
+<button class="btn full" style="margin-top:14px">Start tracking</button></form></div>`}
+function today(){
+  const eaten=sum('kcal'),left=S.goal-eaten,pct=Math.min(1,eaten/S.goal);
+  const mb=(l,g,t,c)=>`<div class="mb"><div><span>${l}</span><span>${g} / ${t} g</span></div><div class="tr"><i data-w="${Math.min(100,g/t*100)}" style="background:${c}"></i></div></div>`;
+  const ring=`<div class="card"><div class="ring"><svg width="210" height="210" viewBox="0 0 180 180"><circle class="t" cx="90" cy="90" r="80"/><circle class="v ${left<0?'over':''}" id="rv" cx="90" cy="90" r="80" data-p="${pct}" style="stroke-dashoffset:502.65"/></svg>
+<div class="n"><b>${eaten}</b><span style="color:${left<0?'var(--sec)':'var(--mute)'}">${left>=0?left+' kcal left':-left+' kcal over'}</span></div></div>
+<p style="text-align:center;font-weight:600">Goal: ${S.goal} kcal</p>${mb('Protein',sum('p'),Math.round(S.goal*.25/4),'var(--pri)')}${mb('Carbs',sum('c'),Math.round(S.goal*.5/4),'#d99a1c')}${mb('Fat',sum('f'),Math.round(S.goal*.25/9),'var(--sec)')}</div>`;
+  const list=S.log.length?MEALS.filter(m=>S.log.some(e=>e.m===m)).map(m=>`<h2>${m}</h2>`+S.log.map((e,k)=>[e,k]).filter(([e])=>e.m===m).map(([e,k])=>{const f=S.foods[e.i];return `<div class="item" id="it${k}"><span class="e">${f.emoji}</span><div class="m"><b>${esc(f.name)}</b><br><small>${e.s} serving(s)</small></div><b>${Math.round(f.kcal*e.s)} kcal</b><button class="x" aria-label="Remove ${esc(f.name)}" onclick="del(${k})">✕</button></div>`}).join('')).join(''):`<div class="card empty">Nothing logged yet.<br>Open Foods and add your first meal.</div>`;
+  return shell('today',`<h1>Hi, ${esc(S.user)}</h1><p style="color:var(--mute)">Here is your day so far.</p><div class="two">${ring}<div>${list}</div></div>`);
+}
+function grid(){
+  const fs=S.foods.map((f,i)=>({f,i})).filter(({f})=>f.name.toLowerCase().includes(q.toLowerCase())&&(!cat||f.cat===cat));
+  return fs.length?fs.map(({f,i})=>`<button class="fc" onclick="go('#/food/${i}')"><span class="tag">${f.cat}</span><span class="e">${f.emoji}</span><b>${esc(f.name)}</b><small>${f.kcal} kcal</small></button>`).join(''):'<div class="empty">No foods match. Try another search or add a new food.</div>'}
+function foods(){
+  return shell('foods',`<input id="sq" placeholder="🔍  Search foods" value="${esc(q)}" aria-label="Search foods">
+<div class="chips">${[null,...CATS].map(c=>`<button class="chip ${cat===c?'on':''}" data-c="${c||''}">${c||'All'}</button>`).join('')}</div>
+<div class="grid" id="fg">${grid()}</div>`);
+}
+let sv=1,sm='Lunch';
+function detail(i){
+  const f=S.foods[i];if(!f)return foods();
+  return `<main class="fade narrow"><a href="#/foods" style="color:var(--pri);text-decoration:none">← Back</a>
+<div style="text-align:center"><div style="font-size:5.5rem">${f.emoji}</div><h1>${esc(f.name)}</h1><h2 id="dk" style="color:var(--pri)"></h2></div>
+<div class="macros" id="dm"></div><label>Servings: <b id="sl">${sv}</b></label><input type="range" id="sr" min=".5" max="5" step=".5" value="${sv}" style="padding:0">
+<label for="ml">Meal</label><select id="ml">${MEALS.map(m=>`<option ${m===sm?'selected':''}>${m}</option>`).join('')}</select>
+<button class="btn full" style="margin-top:20px" id="ad">Add to today</button></main>`;
+}
+function add(){return `<main class="fade narrow"><a href="#/foods" style="color:var(--pri);text-decoration:none">← Back</a><h1>Add a food</h1><form id="af" novalidate>
+<label for="a1">Food name</label><input id="a1"><span class="err" id="e1"></span>
+<label for="a2">Category</label><select id="a2">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+<label for="a3">Calories per serving (kcal)</label><input id="a3" inputmode="numeric"><span class="err" id="e3"></span>
+<div class="row"><div><label for="a4">Protein (g)</label><input id="a4" inputmode="numeric"><span class="err" id="e4"></span></div><div><label for="a5">Carbs (g)</label><input id="a5" inputmode="numeric"><span class="err" id="e5"></span></div><div><label for="a6">Fat (g)</label><input id="a6" inputmode="numeric"><span class="err" id="e6"></span></div></div>
+<button class="btn full" style="margin-top:16px">Save food</button></form></main>`}
+let male=true,res=null;
+function profile(){
+  return shell('profile',`<h1>${esc(S.user)}</h1><div class="card sw" style="margin-top:12px"><span>🌙 Dark mode</span><button class="btn out" id="dm2">${isDark()?'On':'Off'}</button></div>
+<h2>Daily calorie goal</h2><form class="card" id="gf" novalidate><div class="row"><div><label for="g1">Age</label><input id="g1" inputmode="numeric"><span class="err" id="f1"></span></div><div><label for="g2">Height (cm)</label><input id="g2" inputmode="numeric"><span class="err" id="f2"></span></div><div><label for="g3">Weight (kg)</label><input id="g3" inputmode="numeric"><span class="err" id="f3"></span></div></div>
+<label>Sex</label><div class="seg"><button type="button" data-m="1" class="${male?'on':''}">Male</button><button type="button" data-m="0" class="${male?'':'on'}">Female</button></div>
+<label for="g4">Activity level</label><select id="g4"><option value="1.2">Mostly sitting</option><option value="1.375" selected>Light exercise</option><option value="1.55">Moderate exercise</option><option value="1.725">Very active</option></select>
+<button class="btn full" style="margin-top:14px">Calculate</button><div id="gr" style="margin-top:12px"></div></form>
+<button class="btn out" style="margin-top:20px" id="lo">Log out</button>`);
+}
+
+// ───────── Router + event wiring ─────────
+function render(){
+  theme();const r=location.hash.replace('#/','')||'',app=$('#app');
+  if(!splashDone){app.innerHTML=splash();setTimeout(()=>{splashDone=true;go(S.user?'#/today':'#/login');render()},1600);return}
+  if(!S.user&&r!=='login'){go('#/login');return}
+  const [p,arg]=r.split('/');
+  app.innerHTML=p==='login'?login():p==='foods'?foods():p==='food'?detail(+arg):p==='add'?add():p==='profile'?profile():today();
+  scrollTo(0,0);wire(p,+arg);
+}
+function wire(p,i){
+  if(p==='login')$('#lf').onsubmit=e=>{e.preventDefault();const n=$('#n').value.trim(),m=$('#e').value,w=$('#p').value;
+    const a=fe('en',n.length<2?'Enter at least 2 characters':''),b=fe('ee',/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(m)?'':'Enter a valid email address'),c=fe('ep',w.length<6?'Use 6 or more characters':'');
+    if(a&&b&&c){S.user=n;save();go('#/today')}};
+  if(p==='today'||p===''||p==='undefined'){requestAnimationFrame(()=>requestAnimationFrame(()=>{const v=$('#rv');if(v)v.style.strokeDashoffset=502.65*(1-v.dataset.p);document.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%')}))}
+  if(p==='foods'){$('#sq').oninput=e=>{q=e.target.value;$('#fg').innerHTML=grid()};
+    document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.c||null;render()})}
+  if(p==='food'){const f=S.foods[i];if(!f)return;if(!wire.last||wire.last!==i){sv=1}wire.last=i;const upd=()=>{sv=+$('#sr').value;$('#sl').textContent=sv;$('#dk').textContent=Math.round(f.kcal*sv)+' kcal';
+      $('#dm').innerHTML=[['Protein',f.p],['Carbs',f.c],['Fat',f.f]].map(([l,v])=>`<div class="card"><b>${Math.round(v*sv)} g</b><br><small>${l}</small></div>`).join('')};
+    $('#sr').oninput=upd;upd();$('#ml').onchange=e=>sm=e.target.value;
+    $('#ad').onclick=()=>{S.log.push({i,s:sv,m:sm});save();toast(`${f.name} added to ${sm}`);sv=1;wire.last=null;go('#/today')}}
+  if(p==='add')$('#af').onsubmit=e=>{e.preventDefault();const nm=$('#a1').value.trim(),num=(id,eid,mx)=>{const v=$('#'+id).value.trim(),n=Number(v);return fe(eid,v===''||!Number.isInteger(n)?'Whole number':(n<0||n>mx?`0 to ${mx}`:''))};
+    const dup=S.foods.some(f=>f.name.toLowerCase()===nm.toLowerCase());
+    const ok=[fe('e1',!nm?'Enter a name':dup?'This food already exists':''),num('a3','e3',3000),num('a4','e4',200),num('a5','e5',500),num('a6','e6',200)].every(Boolean);
+    if(!ok)return;// new foods go first, so shift logged indexes
+    S.log.forEach(l=>l.i++);S.foods.unshift({name:nm,emoji:'🍽️',cat:$('#a2').value,kcal:+$('#a3').value,p:+$('#a4').value,c:+$('#a5').value,f:+$('#a6').value});save();toast('Food saved');go('#/foods')};
+  if(p==='profile'){$('#dm2').onclick=()=>{S.dark=!isDark();save();render()};
+    document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{male=b.dataset.m==='1';document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b))});
+    $('#lo').onclick=()=>{S.user=null;S.log=[];save();go('#/login')};
+    $('#gf').onsubmit=e=>{e.preventDefault();const r=(id,eid,lo,hi)=>{const n=Number($('#'+id).value);return fe(eid,Number.isInteger(n)&&n>=lo&&n<=hi?'':`Enter ${lo} to ${hi}`)};
+      if(![r('g1','f1',10,100),r('g2','f2',100,250),r('g3','f3',30,300)].every(Boolean))return;
+      const bmr=10*$('#g3').value+6.25*$('#g2').value-5*$('#g1').value+(male?5:-161);res=Math.round(bmr*$('#g4').value);
+      $('#gr').innerHTML=`<div class="fade sw"><b>Maintenance: ${res} kcal/day</b><button type="button" class="btn out" id="ug">Use as goal</button></div>`;
+      $('#ug').onclick=()=>{S.goal=res;save();toast(`Goal set to ${res} kcal`)}}}
+}
+function del(k){const el=$('#it'+k);if(el)el.classList.add('gone');setTimeout(()=>{S.log.splice(k,1);save();render()},250)}
+addEventListener('hashchange',()=>splashDone&&render());
+render();
+</script>
+</body>
+</html>
